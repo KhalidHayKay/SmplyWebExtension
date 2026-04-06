@@ -1,7 +1,7 @@
 import { shortenUrl } from '../services/api.js';
 
-const urlInput = document.getElementById('urlInput');
-const button = document.getElementById('shortenBtn');
+const urlInput = document.querySelector('.url-entry');
+const button = document.querySelector('.btn-primary');
 const resultBox = document.getElementById('result');
 const shortUrlEl = document.getElementById('shortUrl');
 const copyBtn = document.getElementById('copyBtn');
@@ -13,12 +13,13 @@ const copyBtn = document.getElementById('copyBtn');
 		currentWindow: true,
 	});
 
-	urlInput.value = tab.url;
+	console.log(urlInput);
+	urlInput.textContent = tab.url;
 })();
 
 // Shorten
 button.addEventListener('click', async () => {
-	const longUrl = urlInput.value;
+	const longUrl = urlInput.textContent;
 
 	const shortUrl = await shortenUrl(longUrl);
 
