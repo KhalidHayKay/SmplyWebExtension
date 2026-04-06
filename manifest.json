@@ -4,7 +4,7 @@
 	"version": "1.0",
 	"description": "An Extension powered by the Smply URL shortening service to shorten current page URL.",
 	"permissions": ["activeTab", "scripting"],
-	"host_permissions": ["http://localhost:8000/*"],
+	"host_permissions": ["https://smply.cc/*", "http://localhost:8000/*"],
 	"action": {
 		"default_popup": "popup/popup.html",
 		"default_icon": {
