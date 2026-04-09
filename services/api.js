@@ -1,14 +1,23 @@
+// Helper to get API key from storage (returns a promise)
+function getApiKey() {
+	return new Promise((resolve) => {
+		chrome.storage.sync.get('apiKey', (data) => {
+			resolve(data.apiKey || null);
+		});
+	});
+}
+
 export async function shortenUrl(longUrl) {
 	try {
 		const body = new FormData();
 		body.append('url', longUrl);
 
-		const response = await fetch('http://localhost:8000/api/v1/shorten', {
-			// const response = await fetch('https://smply.cc/api/shorten', {
+		const apiKey = await getApiKey();
+
+		const response = await fetch('https://smply.cc/api/v1/shorten', {
 			method: 'POST',
 			headers: {
-				'X-API-Key':
-					'sk_internal_4a7f9c2e1b8d5f3a9c6e2b1f4d7a9c3e5b8f2a4d6c9e1b3f5a7d9c2e4f6a8b',
+				'X-API-Key': apiKey || '',
 			},
 			body,
 		});
@@ -30,7 +39,9 @@ export async function shortenUrl(longUrl) {
 			} else if (response.status === 404) {
 				throw new Error('API endpoint not found.');
 			} else if (response.status === 401) {
-				throw new Error('Unauthorized. Check credentials.');
+				throw new Error(
+					'Unauthorized. Check your API key in the extension settings.',
+				);
 			}
 
 			throw new Error('Failed to shorten URL.');

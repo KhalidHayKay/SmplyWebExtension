@@ -3,8 +3,12 @@
 	"name": "Smply",
 	"version": "1.0",
 	"description": "An Extension powered by the Smply URL shortening service to shorten current page URL.",
-	"permissions": ["activeTab", "scripting"],
+	"permissions": ["activeTab", "scripting", "storage"],
 	"host_permissions": ["https://smply.cc/*", "http://localhost:8000/*"],
+	"options_ui": {
+		"page": "options/options.html",
+		"open_in_tab": false
+	},
 	"action": {
 		"default_popup": "popup/popup.html",
 		"default_icon": {

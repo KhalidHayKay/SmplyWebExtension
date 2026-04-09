@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smply - API Key Settings</title>
+    <link rel="stylesheet" href="options.css" />
+    <script type="module" src="options.js" defer></script>
+</head>
+
+<body>
+    <div class="options-container">
+        <div class="options-card">
+            <!-- Header -->
+            <h1 class="header">API Key Configuration</h1>
+
+            <!-- Info Banner -->
+            <div class="info-banner">
+                <svg stroke="currentColor" fill="currentColor" viewBox="0 0 1024 1024" class="info-icon"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z">
+                    </path>
+                    <path
+                        d="M464 336a48 48 0 1 0 96 0 48 48 0 1 0-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z">
+                    </path>
+                </svg>
+                <p class="info-text">
+                    Enter your Smply API key here. <br>
+                    You can request an API key from our <span class="info-link">website</span>.
+                </p>
+            </div>
+
+            <!-- Form Section -->
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="api-key" class="form-label">
+                        API Key
+                        <span class="form-label-hint">Leave empty to remove</span>
+                    </label>
+                    <input type="password" id="api-key" class="form-input" placeholder="sk_live_xxxxxxxxxxxxxxxxxxxx"
+                        autocomplete="off" />
+                </div>
+            </div>
+
+            <!-- Messages -->
+            <div id="success-message" class="message success hidden">
+                <svg stroke="currentColor" fill="currentColor" viewBox="0 0 24 24" class="message-icon"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill="none" d="M0 0h24v24H0V0z"></path>
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+                </svg>
+                <p class="message-text">API key saved successfully!</p>
+            </div>
+
+            <div id="error-message" class="message error hidden">
+                <svg stroke="currentColor" fill="currentColor" viewBox="0 0 24 24" class="message-icon"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill="none" d="M0 0h24v24H0V0z"></path>
+                    <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z">
+                    </path>
+                </svg>
+                <p class="message-text" id="error-text"></p>
+            </div>
+
+            <!-- Button Group -->
+            <div class="button-group">
+                <button id="save" class="btn-primary">Save API Key</button>
+                <button id="clear" class="btn-secondary">Clear</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

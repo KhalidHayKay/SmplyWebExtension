@@ -33,6 +33,23 @@ button.addEventListener('click', async () => {
 		console.error(err);
 
 		errorEl.textContent = err.message;
+		
+		// Add helpful link for API key errors
+		if (err.message.includes('API key') || err.message.includes('Unauthorized')) {
+			const helpLink = document.createElement('a');
+			helpLink.href = '#';
+			helpLink.style.color = 'inherit';
+			helpLink.style.textDecoration = 'underline';
+			helpLink.style.marginLeft = '4px';
+			helpLink.textContent = 'Configure API key';
+			helpLink.addEventListener('click', (e) => {
+				e.preventDefault();
+				chrome.runtime.openOptionsPage();
+			});
+			errorEl.appendChild(document.createTextNode(' — '));
+			errorEl.appendChild(helpLink);
+		}
+
 		errorEl.classList.remove('hidden');
 	} finally {
 		button.disabled = false;
