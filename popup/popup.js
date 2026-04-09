@@ -1,4 +1,5 @@
 import { shortenUrl } from '../services/api.js';
+import { copyToClipboard } from '../utils/helper.js';
 
 const navBtn = document.querySelector('.btn-outline');
 const urlInput = document.querySelector('.url-entry');
@@ -9,14 +10,17 @@ const shortUrlEl = document.querySelector('.short-url-text');
 const copyBtn = document.querySelector('.btn-copy');
 
 // Auto-fill current tab URL
-(async () => {
-	const [tab] = await chrome.tabs.query({
-		active: true,
-		currentWindow: true,
-	});
-
-	urlInput.textContent = tab.url;
-})();
+document.addEventListener('DOMContentLoaded', async () => {
+	try {
+		const [tab] = await chrome.tabs.query({
+			active: true,
+			currentWindow: true,
+		});
+		if (tab?.url) urlInput.textContent = tab.url;
+	} catch (err) {
+		console.warn('Failed to get tab URL:', err);
+	}
+});
 
 // Shorten
 button.addEventListener('click', async () => {
@@ -30,10 +34,8 @@ button.addEventListener('click', async () => {
 		shortUrlEl.textContent = shortUrl;
 		resultContainer.classList.remove('hidden');
 	} catch (err) {
-		console.error(err);
-
 		errorEl.textContent = err.message;
-		
+
 		// Add helpful link for API key errors
 		if (err.message.includes('API key') || err.message.includes('Unauthorized')) {
 			const helpLink = document.createElement('a');
@@ -59,7 +61,7 @@ button.addEventListener('click', async () => {
 
 // Copy
 copyBtn.addEventListener('click', () => {
-	navigator.clipboard.writeText(shortUrlEl.textContent);
+	copyToClipboard(shortUrlEl.textContent);
 });
 
 navBtn.addEventListener('click', () => {

@@ -1,104 +1,85 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="stylesheet" href="popup.css" as="style" />
-		<script type="module" src="popup.js" defer></script>
-	</head>
-	<body>
-		<div class="popup-overlay">
-			<div class="popup-card">
-				<div class="content-wrapper">
-					<header class="header">
-						<div class="logo">
-							<div class="logo-mark">
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-									<rect width="32" height="32" rx="8" fill="#0d0f12" />
-									<path
-										d="M9 16a7 7 0 0 1 14 0"
-										stroke="white"
-										stroke-width="2.2"
-										fill="none"
-										stroke-linecap="round"
-									/>
-									<circle cx="16" cy="16" r="2.5" fill="white" />
-								</svg>
-							</div>
-							<p>smply<span class="logo-tld">.cc</span></p>
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width" />
+	<title>Smply - URL Shortener</title>
+	<link rel="stylesheet" href="popup.css" as="style" />
+	<script type="module" src="popup.js" defer></script>
+</head>
+
+<body>
+	<div class="popup-overlay">
+		<div class="popup-card">
+			<div class="content-wrapper">
+				<header class="header">
+					<div class="logo">
+						<div class="logo-mark">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+								<rect width="32" height="32" rx="8" fill="#0d0f12" />
+								<path d="M9 16a7 7 0 0 1 14 0" stroke="white" stroke-width="2.2" fill="none"
+									stroke-linecap="round" />
+								<circle cx="16" cy="16" r="2.5" fill="white" />
+							</svg>
 						</div>
-						<button class="btn-outline">
-							<span>Go to Website</span>
-							<svg
-								stroke="currentColor"
-								fill="currentColor"
-								viewBox="0 0 16 16"
-								height="1em"
-								width="1em"
-								xmlns="http://www.w3.org/2000/svg"
-							>
+						<p>smply<span class="logo-tld">.cc</span></p>
+					</div>
+					<button class="btn-outline">
+						<span>Go to Website</span>
+						<svg stroke="currentColor" fill="currentColor" viewBox="0 0 16 16" height="1em" width="1em"
+							xmlns="http://www.w3.org/2000/svg">
+							<path fill-rule="evenodd"
+								d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z">
+							</path>
+						</svg>
+					</button>
+				</header>
+
+				<div class="info-banner">
+					<svg stroke="currentColor" fill="currentColor" viewBox="0 0 1024 1024" class="info-icon"
+						xmlns="http://www.w3.org/2000/svg">
+						<path
+							d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z">
+						</path>
+						<path
+							d="M464 336a48 48 0 1 0 96 0 48 48 0 1 0-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z">
+						</path>
+					</svg>
+					<p class="info-text">
+						For full control over your links, please continue to the website
+					</p>
+				</div>
+
+				<div class="url-section">
+					<div class="url-card">
+						<p class="url-label">Shorten current URL</p>
+						<div class="url-entry">Could not retrieve current tab URL</div>
+						<button class="btn-primary">Go</button>
+						<p class="error hidden"></p>
+					</div>
+				</div>
+
+				<div class="result-container hidden">
+					<div class="result-header">
+						<p class="section-title">Result</p>
+					</div>
+					<div class="short-url-badge">
+						<p class="short-url-text">smply.cc/code</p>
+						<button class="btn-copy" title="Copy Link">
+							<svg stroke="currentColor" fill="currentColor" viewBox="0 0 24 24" height="1em" width="1em"
+								xmlns="http://www.w3.org/2000/svg">
+								<path fill="none" d="M0 0h24v24H0V0z"></path>
 								<path
-									fill-rule="evenodd"
-									d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
-								></path>
+									d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z">
+								</path>
 							</svg>
 						</button>
-					</header>
-
-					<div class="info-banner">
-						<svg
-							stroke="currentColor"
-							fill="currentColor"
-							viewBox="0 0 1024 1024"
-							class="info-icon"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<path
-								d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
-							></path>
-							<path
-								d="M464 336a48 48 0 1 0 96 0 48 48 0 1 0-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z"
-							></path>
-						</svg>
-						<p class="info-text">
-							For full control over your links, please continue to the website
-						</p>
-					</div>
-
-					<div class="url-section">
-						<div class="url-card">
-							<p class="url-label">Shorten current URL</p>
-							<div class="url-entry">Url goes here</div>
-							<button class="btn-primary">Go</button>
-							<p class="error hidden"></p>
-						</div>
-					</div>
-
-					<div class="result-container hidden">
-						<div class="result-header">
-							<p class="section-title">Result</p>
-						</div>
-						<div class="short-url-badge">
-							<p class="short-url-text">smply.cc/xyz123</p>
-							<button class="btn-copy" title="Copy Link">
-								<svg
-									stroke="currentColor"
-									fill="currentColor"
-									viewBox="0 0 24 24"
-									height="1em"
-									width="1em"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path fill="none" d="M0 0h24v24H0V0z"></path>
-									<path
-										d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"
-									></path>
-								</svg>
-							</button>
-						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</body>
+	</div>
+</body>
+
 </html>

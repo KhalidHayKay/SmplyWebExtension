@@ -1,11 +1,4 @@
-// Helper to get API key from storage (returns a promise)
-function getApiKey() {
-	return new Promise((resolve) => {
-		chrome.storage.sync.get('apiKey', (data) => {
-			resolve(data.apiKey || null);
-		});
-	});
-}
+import { getApiKey } from '../utils/helper.js';
 
 export async function shortenUrl(longUrl) {
 	try {
