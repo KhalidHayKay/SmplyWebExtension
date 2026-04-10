@@ -3,7 +3,7 @@
 	"name": "Smply",
 	"version": "1.0",
 	"description": "Shorten any page URL instantly with Smply — one click, a clean short link, ready to share.",
-	"permissions": ["activeTab", "scripting", "storage"],
+	"permissions": ["activeTab", "storage"],
 	"host_permissions": ["https://smply.cc/*"],
 	"options_ui": {
 		"page": "options/options.html",
