@@ -1,52 +1,58 @@
-import { getApiKey } from '../utils/helper.js';
+import { getApiKey } from "../utils/helper.js";
 
 export async function shortenUrl(longUrl) {
-	try {
-		const body = new FormData();
-		body.append('url', longUrl);
+  const apiKey = await getApiKey();
+  if (!apiKey) {
+    throw new Error("An API key is required. Configure it in the extension settings.");
+  }
 
-		const apiKey = await getApiKey();
+  try {
+    const url = new URL(longUrl);
+    if (!["http:", "https:"].includes(url.protocol)) throw new Error();
+  } catch (_) {
+    throw new Error("Please open a valid HTTP or HTTPS page to shorten.");
+  }
 
-		const response = await fetch('https://smply.cc/api/v1/shorten', {
-			method: 'POST',
-			headers: {
-				'X-API-Key': apiKey || '',
-			},
-			body,
-		});
+  const body = new FormData();
+  body.append("url", longUrl);
 
-		// Server responded, but with error status
-		if (!response.ok) {
-			let errorData = {};
+  let response;
+  try {
+    response = await fetch("https://smply.cc/api/v1/shorten", {
+      method: "POST",
+      headers: { "X-API-Key": apiKey },
+      body,
+    });
+  } catch (_) {
+    throw new Error("Unable to reach Smply. Check your internet connection and try again.");
+  }
 
-			try {
-				errorData = await response.json();
-			} catch (_) {}
+  if (!response.ok) {
+    if (response.status === 401) {
+      throw new Error("Your API key is invalid or expired. Update it in the extension settings.");
+    }
+    if (response.status === 400 || response.status === 422) {
+      throw new Error("Smply could not accept this URL. Check the page address and try again.");
+    }
+    if (response.status === 429) {
+      throw new Error("Rate limit exceeded. Please try again later.");
+    }
+    if (response.status >= 500) {
+      throw new Error("Smply is temporarily unavailable. Please try again later.");
+    }
+    throw new Error("Unable to shorten this URL. Please try again later.");
+  }
 
-			if (response.status === 422) {
-				throw new Error(errorData.error || 'Invalid URL');
-			} else if (response.status === 429) {
-				throw new Error('Rate limit exceeded. Please try again later.');
-			} else if (response.status >= 500) {
-				throw new Error('Server error. Please try again later.');
-			} else if (response.status === 404) {
-				throw new Error('API endpoint not found.');
-			} else if (response.status === 401) {
-				throw new Error(
-					'Unauthorized. Check your API key in the extension settings.',
-				);
-			}
-
-			throw new Error('Failed to shorten URL.');
-		}
-
-		const { data } = await response.json();
-		return data.short;
-	} catch (err) {
-		if (err instanceof TypeError) {
-			throw new Error('Network error. Check your internet connection or CORS.');
-		}
-
-		throw err;
-	}
+  try {
+    const responseData = await response.json();
+    const shortUrl = responseData?.data?.short_url;
+    if (responseData?.success === false || typeof shortUrl !== "string" || !shortUrl.trim()) {
+      throw new Error();
+    }
+    const parsed = new URL(shortUrl);
+    if (!["http:", "https:"].includes(parsed.protocol)) throw new Error();
+    return shortUrl;
+  } catch (_) {
+    throw new Error("Smply returned an invalid response. Please try again later.");
+  }
 }

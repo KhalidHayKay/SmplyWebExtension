@@ -1,11 +1,12 @@
 export function copyToClipboard(text) {
-	navigator.clipboard.writeText(text);
+	return navigator.clipboard.writeText(text);
 }
 
-export function getApiKey() {
-	return new Promise((resolve) => {
-		chrome.storage.sync.get('apiKey', (data) => {
-			resolve(data.apiKey || null);
-		});
-	});
+export async function getApiKey() {
+	try {
+		const { apiKey } = await chrome.storage.local.get('apiKey');
+		return typeof apiKey === 'string' ? apiKey.trim() || null : null;
+	} catch (_) {
+		throw new Error('Unable to read your API key. Reopen the extension and try again.');
+	}
 }

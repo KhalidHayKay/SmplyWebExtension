@@ -10,43 +10,53 @@ infoLink.addEventListener('click', () => {
 	chrome.tabs.create({ url: 'https://smply.cc/api' });
 });
 
-// Load existing key on page open
-document.addEventListener('DOMContentLoaded', () => {
-	chrome.storage.sync.get('apiKey', (data) => {
-		if (data.apiKey) {
-			apiKeyInput.value = data.apiKey;
-		}
-	});
-});
+function setBusy(busy) {
+	apiKeyInput.disabled = busy;
+	saveBtn.disabled = busy;
+	clearBtn.disabled = busy;
+}
 
-// Save API key
-saveBtn.addEventListener('click', () => {
-	const key = apiKeyInput.value.trim();
+function showError(message) {
+	errorText.textContent = message;
+	errorMsg.classList.remove('hidden');
+}
 
-	// Hide previous messages
-	successMsg.classList.add('hidden');
-	errorMsg.classList.add('hidden');
-
-	if (!key) {
-		// If empty, remove the key
-		chrome.storage.sync.remove('apiKey', () => {
-			successMsg.classList.remove('hidden');
-			successMsg.querySelector('.message-text').textContent = 'API key removed.';
-		});
-		return;
+// Prevent a slow initial read from overwriting a save or clear.
+setBusy(true);
+document.addEventListener('DOMContentLoaded', async () => {
+	try {
+		const { apiKey } = await chrome.storage.local.get('apiKey');
+		apiKeyInput.value = typeof apiKey === 'string' ? apiKey : '';
+	} catch (_) {
+		showError('Unable to load your API key. Please reopen settings and try again.');
+	} finally {
+		setBusy(false);
 	}
-
-	// Save the key
-	chrome.storage.sync.set({ apiKey: key }, () => {
-		successMsg.classList.remove('hidden');
-		successMsg.querySelector('.message-text').textContent =
-			'API key saved successfully!';
-	});
 });
 
-// Clear API key
-clearBtn.addEventListener('click', () => {
-	apiKeyInput.value = '';
+async function persistKey(key) {
+	setBusy(true);
 	successMsg.classList.add('hidden');
 	errorMsg.classList.add('hidden');
-});
+	try {
+		if (key) {
+			await chrome.storage.local.set({ apiKey: key });
+		} else {
+			await chrome.storage.local.remove('apiKey');
+		}
+		apiKeyInput.value = key;
+		successMsg.querySelector('.message-text').textContent = key
+			? 'API key saved successfully!'
+			: 'API key removed.';
+		successMsg.classList.remove('hidden');
+	} catch (_) {
+		showError(key
+			? 'Unable to save your API key. Please try again.'
+			: 'Unable to remove your API key. Please try again.');
+	} finally {
+		setBusy(false);
+	}
+}
+
+saveBtn.addEventListener('click', () => persistKey(apiKeyInput.value.trim()));
+clearBtn.addEventListener('click', () => persistKey(''));

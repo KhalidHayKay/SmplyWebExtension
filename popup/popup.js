@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Shorten
 button.addEventListener('click', async () => {
 	errorEl.classList.add('hidden');
+	resultContainer.classList.add('hidden');
 
 	button.disabled = true;
 	button.textContent = 'Shortening...';
@@ -60,8 +61,13 @@ button.addEventListener('click', async () => {
 });
 
 // Copy
-copyBtn.addEventListener('click', () => {
-	copyToClipboard(shortUrlEl.textContent);
+copyBtn.addEventListener('click', async () => {
+	try {
+		await copyToClipboard(shortUrlEl.textContent);
+	} catch (_) {
+		errorEl.textContent = 'Unable to copy the link. Please select and copy it manually.';
+		errorEl.classList.remove('hidden');
+	}
 });
 
 navBtn.addEventListener('click', () => {
